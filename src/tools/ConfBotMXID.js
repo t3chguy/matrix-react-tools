@@ -23,6 +23,7 @@ export default class ConfBotMXID extends Component {
     };
 
     getConferenceUserIdForRoom() {
+        if (!this.state.roomId) return '';
         const base64RoomId = window.btoa(this.state.roomId).replace(/=/g, "");
         return "@" + this.state.userPrefix + base64RoomId + ":" + this.state.domain;
     }
@@ -43,6 +44,8 @@ export default class ConfBotMXID extends Component {
     }
 
     render() {
+        const mxid = this.getConferenceUserIdForRoom();
+
         return (<Container>
             <Form>
                 <legend>Conference Bot MXID Generator</legend>
@@ -68,9 +71,12 @@ export default class ConfBotMXID extends Component {
                        value={this.state.domain} />
 
                 <Divider />
-                <Input label="Bot MXID"
-                       disabled={true}
-                       value={this.state.roomId ? this.getConferenceUserIdForRoom() : ''} />
+                {
+                    mxid
+                    ? <p>This allows you to run the following command `<code>/ban {mxid}</code>` to disable VoIP Conferencing for a given Room.</p>
+                    : <p>Enter values above to see the Conf Bot's MXID.</p>
+                }
+
             </Form>
         </Container>);
     }
